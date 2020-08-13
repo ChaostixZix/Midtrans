@@ -22,7 +22,8 @@ class MidtransController extends Controller
 
     public function handler(Request $request)
     {
-        var_dump($request->all());
+        $data = json_decode($request->get('response'), true);
+        file_get_contents(Veritrans_Config::getBaseUrl() . '/' . $data['order_id'] . '/cancel');
     }
     public function getSnap($amount)
     {
