@@ -23,7 +23,6 @@ class MidtransController extends Controller
 
     public function handler(Request $request)
     {
-        $notif = new Veritrans_Notification();
         $data = json_decode($request->get('response'), true);
         $arrCancel = [
             'pending',
