@@ -8,6 +8,7 @@ use Veritrans_Config;
 use Veritrans_Notification;
 use Veritrans_Snap;
 use Illuminate\Support\Facades\DB;
+
 class MidtransController extends Controller
 {
     protected $request;
@@ -22,8 +23,11 @@ class MidtransController extends Controller
 
     public function handler(Request $request)
     {
-        $data = json_decode($request->get('response'), true);
+        $data = json_decode($request->get('response'));
+        var_dump($data);
         file_get_contents(Veritrans_Config::getBaseUrl() . '/' . $data['order_id'] . '/cancel');
+        $approve = \Veritrans_Transaction::cancel($data['order_id']);
+        var_dump($approve);
     }
     public function getSnap($amount)
     {
