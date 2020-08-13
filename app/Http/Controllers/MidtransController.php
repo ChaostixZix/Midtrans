@@ -24,7 +24,7 @@ class MidtransController extends Controller
     public function handler(Request $request)
     {
         $notif = new Veritrans_Notification();
-        DBg::transaction(function() use($notif) {
+        DB::transaction(function() use($notif) {
 
             $transaction = $notif->transaction_status;
             $type = $notif->payment_type;
