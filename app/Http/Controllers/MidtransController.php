@@ -23,27 +23,42 @@ class MidtransController extends Controller
 
     public function handler(Request $request)
     {
+        $notif = new Veritrans_Notification();
+        var_dump($notif);
         $data = json_decode($request->get('response'), true);
-//        $approve = \Veritrans_Transaction::cancel($data['order_id']);
-        base64_decode(Veritrans_Config::$serverKey);
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, Veritrans_Config::getBaseUrl().'/'.$data['order_id'].'/refund');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Accept: application/json',
-            'Content-Type: application/json',
-            'Authorization: Basic '
-        ));
-        $output = curl_exec($ch);
-        curl_close($ch);
-        var_dump($output);
+        $cancel = \Veritrans_Transaction::cancel($data['order_id']);
+        $arrCancel = [
+            'pending',
+            'cancel',
+            'deny',
+            'expire'
+        ];
+
+        if(in_array($data['transaction_status'], $arrCancel))
+        {
+            return redirect(env('PREV_URL').'/');
+        }
+
+//        base64_decode(Veritrans_Config::$serverKey);
+//        $ch = curl_init();
+//        curl_setopt($ch, CURLOPT_URL, Veritrans_Config::getBaseUrl().'/'.$data['order_id'].'/refund');
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+//            'Accept: application/json',
+//            'Content-Type: application/json',
+//            'Authorization: Basic '
+//        ));
+//        $output = curl_exec($ch);
+//        curl_close($ch);
+//        var_dump($output);
     }
-    public function getSnap($amount)
+    public function getSnap($amount, $plan)
     {
         header("Access-Control-Allow-Origin: *");
         $params = array(
             'transaction_details' => array(
                 'order_id' => rand(),
                 'gross_amount' => $amount,
+                'plan' => $plan
             )
         );
         $snapToken = Veritrans_Snap::getSnapToken($params);
