@@ -36,7 +36,7 @@ class MidtransController extends Controller
             return redirect(env('PREV_URL').'/cancel');
         }elseif($data['transaction_status'] === 'settlement')
         {
-            return redirect(env('PREV_URL').'/payment-callback/test/midtrans');
+            return redirect(env('PREV_URL').'/manage/payment-callback/test/midtrans');
         }
 
 //        base64_decode(Veritrans_Config::$serverKey);
