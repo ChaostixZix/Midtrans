@@ -22,9 +22,7 @@ class MidtransController extends Controller
 
     public function handler(Request $request)
     {
-        $notif = new Veritrans_Notification();
         var_dump($request->all());
-        var_dump($notif->payment_type);
     }
     public function getSnap($amount)
     {
@@ -60,39 +58,5 @@ class MidtransController extends Controller
         ];
         $snapToken = Veritrans_Snap::getSnapToken($payload);
         return response()->json(['snap' => $snapToken]);
-    }
-    public function notificationHandler(Request $request)
-    {
-        $notif = new Veritrans_Notification();
-        DB::transaction(function() use($notif) {
-            $transaction = $notif->transaction_status;
-            $type = $notif->payment_type;
-            $orderId = $notif->order_id;
-            $fraud = $notif->fraud_status;
-
-            $donation = Donation::findOrFail($orderId);
-            if ($transaction == 'capture') {
-                if ($type == 'credit_card') {
-                    if($fraud == 'challenge') {
-                        $donation->setPending();
-                    } else {
-                        $donation->setSuccess();
-                    }
-                }
-            } elseif ($transaction == 'settlement') {
-                $donation->setSuccess();
-            } elseif($transaction == 'pending'){
-                $donation->setPending();
-            } elseif ($transaction == 'deny') {
-                $donation->setFailed();
-            } elseif ($transaction == 'expire') {
-                $donation->setExpired();
-            } elseif ($transaction == 'cancel') {
-                $donation->setFailed();
-            }
-
-        });
-
-        return;
     }
 }
