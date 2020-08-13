@@ -24,7 +24,11 @@ class MidtransController extends Controller
     public function handler(Request $request)
     {
         $notif = new Veritrans_Notification();
-        var_dump($notif);
+        $transaction = $notif->transaction_status;
+        $type = $notif->payment_type;
+        $order_id = $notif->order_id;
+        $fraud = $notif->fraud_status;
+        var_dump($transaction);
         $data = json_decode($request->get('response'), true);
         $cancel = \Veritrans_Transaction::cancel($data['order_id']);
         $arrCancel = [
