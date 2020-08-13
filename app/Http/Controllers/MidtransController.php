@@ -25,7 +25,6 @@ class MidtransController extends Controller
     {
         $data = json_decode($request->get('response'));
         var_dump($data);
-        file_get_contents(Veritrans_Config::getBaseUrl() . '/' . $data['order_id'] . '/cancel');
         $approve = \Veritrans_Transaction::cancel($data['order_id']);
         var_dump($approve);
     }
