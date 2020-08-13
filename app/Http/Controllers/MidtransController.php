@@ -16,7 +16,7 @@ class MidtransController extends Controller
     {
         $this->request = $request;
         Veritrans_Config::$serverKey = config('services.midtrans.serverKey');
-        Veritrans_Config::$isProduction = config('services.midtrans.isProduction');
+        Veritrans_Config::$isProduction = false;
         Veritrans_Config::$isSanitized = config('services.midtrans.isSanitized');
         Veritrans_Config::$is3ds = config('services.midtrans.is3ds');
     }
@@ -24,7 +24,8 @@ class MidtransController extends Controller
     public function handler(Request $request)
     {
         $data = json_decode($request->get('response'), true);
-        var_dump($data);
+//        var_dump($data);
+        var_dump(Veritrans_Config::$isProduction);
         $approve = \Veritrans_Transaction::cancel($data['order_id']);
         var_dump($approve);
     }
