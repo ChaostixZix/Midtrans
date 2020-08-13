@@ -24,10 +24,18 @@ class MidtransController extends Controller
     public function handler(Request $request)
     {
         $data = json_decode($request->get('response'), true);
-//        var_dump($data);
-        var_dump(Veritrans_Config::$isProduction);
-        $approve = \Veritrans_Transaction::cancel($data['order_id']);
-        var_dump($approve);
+//        $approve = \Veritrans_Transaction::cancel($data['order_id']);
+        base64_decode(Veritrans_Config::$serverKey);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, Veritrans_Config::getBaseUrl().'/'.$data['order_id'].'/refund');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Accept: application/json',
+            'Content-Type: application/json',
+            'Authorization: Basic '
+        ));
+        $output = curl_exec($ch);
+        curl_close($ch);
+        var_dump($output);
     }
     public function getSnap($amount)
     {
