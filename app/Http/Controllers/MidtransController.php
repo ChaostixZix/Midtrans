@@ -23,7 +23,7 @@ class MidtransController extends Controller
 
     public function handler(Request $request)
     {
-        $data = json_decode($request->get('response'));
+        $data = json_decode($request->get('response'), true);
         var_dump($data);
         $approve = \Veritrans_Transaction::cancel($data['order_id']);
         var_dump($approve);
