@@ -16,7 +16,7 @@ class MidtransController extends Controller
     {
         $this->request = $request;
         Veritrans_Config::$serverKey = config('services.midtrans.serverKey');
-        Veritrans_Config::$isProduction = false;
+        Veritrans_Config::$isProduction = config('services.midtrans.isProduction');
         Veritrans_Config::$isSanitized = config('services.midtrans.isSanitized');
         Veritrans_Config::$is3ds = config('services.midtrans.is3ds');
     }
